@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": "Easy"
+		},
+		{
+			"path": "Medium"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"unordered_set": "cpp",
+			"iostream": "cpp",
+			"vector": "cpp",
+			"cmath": "cpp",
+			"map": "cpp",
+			"iosfwd": "cpp",
+			"string": "cpp",
+			"algorithm": "cpp",
+			"chrono": "cpp",
+			"limits": "cpp",
+			"ratio": "cpp"
+		}
+	}
+}
