@@ -1,4 +1,4 @@
-def isPalindrome0(s):
+def longestPalindrome0(s):
     """
     :type s: str
     :rtype: str
@@ -26,7 +26,7 @@ def isPalindrome0(s):
         r = len(s) - 1
     return res
 
-def isPalindrome(s):
+def longestPalindrome(s):
     """
     :type s: str
     :rtype: str
@@ -54,7 +54,7 @@ def isPalindrome(s):
 
 def main():
     s = "babad"
-    print(isPalindrome(s))
+    print(longestPalindrome(s))
 
 if __name__ == '__main__':
     main()
