@@ -23,7 +23,7 @@ def search(nums, target):
         if nums[m] == target:
             return m
         if nums[l] <= nums[m]:
-            if target > nums[m] or target < nums[l]:
+            if target > nums[m] or target < nums[l]: 
                 l = m + 1
             else:
                 r = m - 1
