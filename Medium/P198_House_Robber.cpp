@@ -15,7 +15,7 @@ int rob(vector<int>& nums) {
 }
 
 int main(){
-    vector v = {1,2,3,1};
+    vector<int> v = {1,2,3,1};
     cout << rob(v) << endl;
     return 0;
 }
