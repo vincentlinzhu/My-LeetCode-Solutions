@@ -48,12 +48,12 @@ vector< vector<int> > threeSum(vector<int>& nums) {
                 r--;
             } else {
                 v.push_back({nums[i], nums[l], nums[r]});
-                
+
                 while (l < r && nums[l] == nums[l + 1]) {
                     l++;
                 }
                 l++;
-                
+
                 while (l < r && nums[r - 1] == nums[r]) {
                     r--;
                 }
