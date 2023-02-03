@@ -1,4 +1,3 @@
-#include <iostream>
 using namespace std;
 #include <map>
 #include <vector>
@@ -20,89 +19,71 @@ public:
     Record nodeName;
 };
 
-int getVal(Node n, map<string, int>& m) {
+
+void setValues(int idx, map<int, int>& res, vector<vector<int>> adjacency_matrix) {
+    if (res.count(idx) > 0) return;
     int val = 0;
-    for (Node* child : n.children) {
-        if (child->nodeName.type == "M") { // if n's children are all M types
-            val += stoi(child->nodeName.value);
-        } else {
-            int cTypeVal = 0;
-            cTypeVal = getVal(*child, m);
-            m.insert(pair<string, int>(child->nodeName.name, cTypeVal));
-            val += cTypeVal;
+    vector<int> children = adjacency_matrix[idx];
+    for (int i = 0; i < children.size(); i++){
+        if (children[i] != 1) continue; // no connection
+        if (res.count(i) == 0){ // we don't have the child's value yet
+            setValues(i, res, adjacency_matrix); // O(v) time since look up time is constant.
         }
+        val += res[i];
     }
-    return val;
+    res[idx] = val;
 }
 
+void print_res(map<string, int>& m){
+     for (map<string, int>::iterator it = m.begin(); it != m.end(); it++) {
+        cout << it->first << ": " << it->second << endl;
+    }
+}
 map<string, int> calcMeas(vector<Record> records) {
+    map<int, int> res;
+    // Construct name to index and index to name mapping
+    map<string, int> nameToidx;
+    map<int, string> idxToName;
+
+    int idx = 0;
+    for (int i = 0; i < records.size(); i++) {
+        string name = records[i].name;
+        if (nameToidx.count(name) > 0) continue;
+        nameToidx[name] = idx;
+        idxToName[idx] = name;
+        idx += 1;
+    }
+
     //Implement Adjacent Matrix Graph
-    set<string> recordNames;
+    int n = nameToidx.size();
+    vector<vector<int>> adjacency_matrix(n, vector<int>(n, 0));
     for (int i = 0; i < records.size(); i++) {
-        recordNames.insert(records[i].name);
-    }
-    
-    map<string, int> vertices;
-    int indexCounter = 0;
-    for (set<string>::iterator it = recordNames.begin(); it != recordNames.end(); it++) {
-        vertices.insert(pair<string, int>(record.name, indexCounter));
-        indexCounter++;
-    }
-
-    vector<vector<int>> measureGraph(recordNames.size(), vector<int>(recordNames.size(), 0)) ;
-    for (int i = 0; i < records.size(); i++) {
-        if (records[i].type == "C") {
-            measureGraph[vertices.find(records[i].name)->second][vertices.find(records[i].value)->second] = 1;
+        Record r = records[i];
+        if (r.type == "M"){
+            res[nameToidx[r.name]] = stoi(r.value);
+            continue;
         }
-    }
-    
-//    map<string, Record> m;
-//    for (int i = 0; i < records.size(); i++) {
-//        m.insert(pair<string, Record>(records[i].name, records[i]));
-//    }
-//
-//    map<string, Node> graph;
-//    for (auto& record : records) {
-//        Node* recordNode = new Node;
-//        recordNode->nodeName = record;
-//        map<string, Node>::iterator it = graph.find(record.name);
-//        if (it != graph.end()) {
-//            Node* childRecordNode = new Node;
-//            childRecordNode->nodeName = m.find(recordNode->nodeName.value)->second;
-//            it->second.children.push_back(childRecordNode);
-//        } else {
-//            Node* childRecordNode = new Node;
-//            childRecordNode->nodeName = m.find(recordNode->nodeName.value)->second;
-//            if (recordNode->nodeName.type == "C") {
-//                recordNode->children.push_back(childRecordNode);
-//            }
-//            graph.insert(pair<string, Node>(record.name, *recordNode));
-//        }
-//    }
-
-    map<string, int> res;
-    // Populate Map with M type measurments: O(v) time where v is the number of measurements
-    for (int i = 0; i < records.size(); i++) {
-        if (records[i].type == "M") {
-            res.insert(pair<string, int>(records[i].name, stoi(records[i].value)));
-        }
-    }
-    
-    map<int, string> m;
-    for (int i = 0; i < measureGraph.size(); i++) {
-        res.insert(pair<int, int>(i, getVal(it->second, res)));
+        // type is combination
+        int idxChild = nameToidx[r.value];
+        int idxParent =nameToidx[r.name];
+        adjacency_matrix[idxParent][idxChild] = 1;
     }
 
-//    for (map<string, Node>::iterator it = graph.begin(); it != graph.end(); it++) {
-//        if (res.find(it->first) == res.end()) {
-//            res.insert(pair<string, int>(it->first, getVal(it->second, res)));
-//        }
-//    }
+    for (int i = 0; i < n; i++){
+        setValues(i, res, adjacency_matrix); // set all values of index and its children
+    }
 
-    return res;
+    //Takes the int to int map and converts it to the string to int map
+    map<string, int> str_res;
+    for (const auto& [key, value] : res) {
+        str_res[idxToName[key]] = value;
+    }
+    return str_res;
 }
 
 int main() {
+    // The following is the test case you gave me during the interview.
+    // Note that the operations field is assumed to always be "+".
     Record m1;
     m1.name = "m1";
     m1.type = "M";
@@ -135,10 +116,9 @@ int main() {
     m4.operation = "+";
 
     vector<Record> r = {m1, m2, m22, m3, m222, m4};
+
     map<string, int> m = calcMeas(r);
-    for (map<string, int>::iterator it = m.begin(); it != m.end(); it++) {
-        cout << it->first << ": " << it->second << endl;
-    }
+    print_res(m);
 }
 
 // if in dic, constant time
