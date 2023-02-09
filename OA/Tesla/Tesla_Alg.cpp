@@ -27,7 +27,7 @@ void setValues(int idx, map<int, int>& res, vector<vector<int>> adjacency_matrix
     for (int i = 0; i < children.size(); i++){
         if (children[i] != 1) continue; // no connection
         if (res.count(i) == 0){ // we don't have the child's value yet
-            setValues(i, res, adjacency_matrix); // O(v) time since look up time is constant.
+            setValues(i, res, adjacency_matrix); // O(v) time since lookup time is constant.
         }
         val += res[i];
     }
