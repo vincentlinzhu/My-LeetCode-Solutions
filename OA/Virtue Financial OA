@@ -1,0 +1,18 @@
+def solutions(S):
+    l = 0
+    r = 0
+    cont = 0
+    count = 0
+    while (r < len(S)):
+        if (S[r] == S[l]):
+            cont += 1
+            count += cont
+            r += 1
+        else:
+            l = r
+            cont = 0
+
+    return count
+    
+X = "zzzyz"
+print(solutions(X)) #8

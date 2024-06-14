@@ -1,0 +1,25 @@
+@media (max-width: 700px) {
+    .nav-item {
+        display: none;
+    }
+    .expanded {
+        display: grid;
+        text-align: center;
+    }
+    .expanded a {
+        padding: 10px;
+    }
+}
+
+@media (min-width: 700px) {
+    .nav-item {
+        display: flex;
+        flex-direction: row;
+    }
+    .expanded {
+        display: none;
+    }
+    .collapsed {
+        display: none;
+    }
+}

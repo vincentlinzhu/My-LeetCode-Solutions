@@ -1,0 +1,9 @@
+SELECT 
+    accounts.username as username, 
+    accounts.email as email, 
+    COUNT(items.id) as items,
+    SUM(items.weight) as total_weight 
+FROM accounts join items on accounts_items.account_id = accounts.id and accounts_items.item_id = items.item_id
+GROUP BY accounts.id HAVING SUM(items.weight) > 20
+ORDER BY account.username DECS
+ORDER BY items ASC 

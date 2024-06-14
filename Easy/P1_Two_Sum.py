@@ -1,3 +1,6 @@
+def findDiff(target, n):
+    return target - n
+
 def twoSum(nums, target):
         """
         :type nums: List[int]
@@ -6,7 +9,7 @@ def twoSum(nums, target):
         """
         temp = {}
         for i, n in enumerate(nums):
-            diff = target - n
+            diff = findDiff(target, n)
             if diff in temp:
                 return [temp[diff], i]
             else:
